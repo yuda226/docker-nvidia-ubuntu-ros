@@ -53,7 +53,8 @@ RUN apt-get update -qq \
 # Note that this requires a docker build argument `user_id`
 ARG user_id
 ENV USERNAME developer
-RUN useradd -U --uid ${user_id} -ms /bin/bash $USERNAME \
+RUN if id -u ${user_id} >/dev/null 2>&1; then userdel -r $(id -un ${user_id}); fi \
+    && useradd -U --uid ${user_id} -ms /bin/bash $USERNAME \
     && echo "$USERNAME:$USERNAME" | chpasswd \
     && adduser $USERNAME sudo \
     && echo "$USERNAME ALL=NOPASSWD: ALL" >> /etc/sudoers.d/$USERNAME
