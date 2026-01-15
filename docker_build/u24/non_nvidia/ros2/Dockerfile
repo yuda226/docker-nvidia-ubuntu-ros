@@ -17,37 +17,23 @@ ENV LC_ALL C.UTF-8
 
 RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
-    build-essential \
-    cmake \
-    cppcheck \
-    gdb \
-    git \
-    libbluetooth-dev \
-    libcwiid-dev \
-    libgoogle-glog-dev \
-    libspnav-dev \
-    libusb-dev \
-    lsb-release \
-    python3-dbg \
-    python3-empy \
-    python3-numpy \
-    python3-setuptools \
-    python3-pip \
-    python3-venv \
-    software-properties-common \
-    sudo \
-    vim \
-    wget \
-    net-tools \
-    iputils-ping \
-    libyaml-cpp-dev \
-    tmux \
-    curl \
-    htop \
-    bash-completion \
-    bc \
-    ansible \
-    && apt-get clean -qq
+    # Build Tools
+    build-essential cmake git wget curl lsb-release software-properties-common sudo \
+    # Debugging & Analysis
+    gdb cppcheck htop tmux vim bash-completion bc python3-dbg \
+    # ROS/Hardware Dependencies
+    libbluetooth-dev libcwiid-dev libgoogle-glog-dev libspnav-dev libusb-dev libyaml-cpp-dev \
+    # Python Environment
+    python3-numpy python3-setuptools python3-pip python3-venv python3-empy python3-pynvim \
+    # Networking
+    net-tools iputils-ping ansible \
+    # GUI/XCB Fixes (Fixes the RViz plugin error)
+    libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xkb1 libxkbcommon-x11-0 libqt5gui5 \
+
+    # Neovim Search Tools (Essential for Telescope/Plugins)
+    ripgrep fd-find xclip \
+    && apt-get clean -qq \
+    && rm -rf /var/lib/apt/lists/*
 
 # Add a user with the same user_id as the user outside of the container
 # Note that this requires a docker build argument `user_id`
